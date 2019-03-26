@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour {
 		float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
 		animator.SetFloat ("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
 
+        
 	}
 
 	void Move(Vector2 inputDir, bool running) {
@@ -64,13 +65,26 @@ public class PlayerController : MonoBehaviour {
 			velocityY = 0;
 		}
 
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1f))
+        {
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                transform.SetParent(hit.transform);
+            }
+            else
+            {
+                transform.SetParent(null);
+            }
+        }
 	}
 
 	void Jump() {
 		if (controller.isGrounded) {
 			float jumpVelocity = Mathf.Sqrt (-2 * gravity * jumpHeight);
 			velocityY = jumpVelocity;
-		}
+        }
 	}
 
 	float GetModifiedSmoothTime(float smoothTime) {
@@ -83,4 +97,5 @@ public class PlayerController : MonoBehaviour {
 		}
 		return smoothTime / airControlPercent;
 	}
+    
 }

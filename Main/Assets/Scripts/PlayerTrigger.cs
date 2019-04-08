@@ -24,6 +24,7 @@ public class PlayerTrigger : MonoBehaviour
         }
     }
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Hello");
@@ -40,4 +41,5 @@ public class PlayerTrigger : MonoBehaviour
             transform.SetParent(null);
         }
     }
+    */
 }

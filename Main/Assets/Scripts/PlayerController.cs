@@ -32,8 +32,8 @@ public class PlayerController : MonoBehaviour {
 		// input
 		Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
 		Vector2 inputDir = input.normalized;
-		bool running = Input.GetKey (KeyCode.LeftShift);
-
+		//bool running = Input.GetKey (KeyCode.LeftShift);
+		bool running = true;
 		Move (inputDir, running);
 
 		if (Input.GetKeyDown (KeyCode.Space)) {

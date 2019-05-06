@@ -10,7 +10,11 @@ public class StairsCase : MonoBehaviour
     public float offSet;
     private Vector3 currentPosition;
     private Vector3 newPosition;
-    public bool move;
+    public bool triggered;
+    [Header("The angle added has to always be 12.84")]
+    public float xAng;
+    public float yAng;
+    public float zAng;
 
     Coroutine MoveIE;
     
@@ -27,9 +31,10 @@ public class StairsCase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if (other.tag == "player")
+        if (other.tag == "player" && !triggered)
         {
             StartCoroutine(moveObject());
+            triggered = true;
         }        
     }
 
@@ -51,6 +56,7 @@ public class StairsCase : MonoBehaviour
             Debug.Log("hello");
             Debug.Log(stairPieces[initialPosition].transform.position);
             stairPieces[initialPosition].transform.position = Vector3.MoveTowards(stairPieces[initialPosition].transform.position, newPosition , openSpeed * Time.deltaTime);
+            stairPieces[initialPosition].transform.eulerAngles = new Vector3(xAng,yAng,zAng);
             yield return null;
         }        
     }

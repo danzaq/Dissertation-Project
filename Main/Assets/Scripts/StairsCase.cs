@@ -6,14 +6,17 @@ public class StairsCase : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject[] stairPieces;
+    public float openSpeed;
     public float offSet;
     private Vector3 currentPosition;
     private Vector3 newPosition;
     public bool move;
+
+    Coroutine MoveIE;
     
     void Start()
     {
-        move = true;
+          
     }
 
     // Update is called once per frame
@@ -26,22 +29,30 @@ public class StairsCase : MonoBehaviour
     {
         if (other.tag == "player")
         {
-            RaiseStaircase();
-            move = false;
+            StartCoroutine(moveObject());
         }        
     }
 
-    void RaiseStaircase()
+    IEnumerator moveObject()
     {
-        if (move)
+        for (int i = 0; i < stairPieces.Length; i++)
         {
-            for (int i = 0; i < stairPieces.Length; i++)
-            {
-                currentPosition = stairPieces[i].transform.position;
-                newPosition = new Vector3(currentPosition.x,(currentPosition.y + (i + offSet)),currentPosition.z);
-                stairPieces[i].transform.position = newPosition;
-            }  
+            MoveIE = StartCoroutine(Moving(i));
+            newPosition = new Vector3(stairPieces[i].transform.position.x,(stairPieces[i].transform.position.y + (i + offSet)),stairPieces[i].transform.position.z);
+            Debug.Log(newPosition);
+            yield return MoveIE;
         }
-        
     }
+
+    IEnumerator Moving(int initialPosition)
+    {
+        while (stairPieces[initialPosition].transform.position != newPosition)
+        {
+            Debug.Log("hello");
+            Debug.Log(stairPieces[initialPosition].transform.position);
+            stairPieces[initialPosition].transform.position = Vector3.MoveTowards(stairPieces[initialPosition].transform.position, newPosition , openSpeed * Time.deltaTime);
+            yield return null;
+        }        
+    }
+    
 }

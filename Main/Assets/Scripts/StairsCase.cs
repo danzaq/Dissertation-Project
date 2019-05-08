@@ -16,17 +16,22 @@ public class StairsCase : MonoBehaviour
     public float yAng;
     public float zAng;
 
+    //public float minHeight;
+    public float maxHeight;
+    public float hoverSpeed;
+    private Vector3 initialPosition;
+
     Coroutine MoveIE;
     
     void Start()
     {
-          
+          initialPosition = gameObject.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        gameObject.transform.position = new Vector3(transform.position.x, initialPosition.y + Mathf.PingPong(Time.time * hoverSpeed, maxHeight) - maxHeight/2f, transform.position.z);;
     }
 
     private void OnTriggerEnter(Collider other) 

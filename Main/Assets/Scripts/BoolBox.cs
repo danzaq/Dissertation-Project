@@ -7,6 +7,7 @@ public class BoolBox : MonoBehaviour
     public bool value = false;
     public LineRenderer line;
     public bool switched;
+    public bool lineNeeded;
 
     public InteractiveObject[] objects;
 
@@ -16,15 +17,19 @@ public class BoolBox : MonoBehaviour
     }
     void Update() 
     {
-        Debug.Log(switched);
-        if (switched)
+        if(lineNeeded)
         {
-            line.material = line.materials[1];
+            Debug.Log(switched);
+            if (switched)
+            {
+                line.material = line.materials[1];
+            }
+            else if(!switched)
+            {
+                line.material = line.materials[0];
+            }
         }
-        else if(!switched)
-        {
-            line.material = line.materials[0];
-        }
+       
     }
     public void Trigger()
     {

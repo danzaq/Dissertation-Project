@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerTrigger : MonoBehaviour
 {
@@ -22,24 +23,12 @@ public class PlayerTrigger : MonoBehaviour
                 box.Trigger();
             }
         }
-    }
 
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Hello");
-        if (collision.transform.tag == "Platform")
+        if(other.tag == "Gate")
         {
-            transform.SetParent(collision.transform);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.transform.tag == "Platform")
-        {
-            transform.SetParent(null);
-        }
-    }
-    */
+    
 }

@@ -17,6 +17,7 @@ public class StairsCase : MonoBehaviour
     public float zAng;
 
     //public float minHeight;
+    [Header("Hovering animation properties")]
     public float maxHeight;
     public float hoverSpeed;
     private Vector3 initialPosition;

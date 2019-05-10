@@ -5,42 +5,54 @@ using UnityEngine;
 public class BoolBox : MonoBehaviour
 {
     public bool value = false;
+
     public LineRenderer line;
+    
     public bool switched;
+    
     public bool lineNeeded;
+
+    public BoolBox oppositeBool;
 
     public InteractiveObject[] objects;
 
+    public Gradient disabledColor, activeColor;
+
     void Start()
     {
-        
+        ToggleLine();
     }
+    
     void Update() 
     {
         if(lineNeeded)
         {
             Debug.Log(switched);
-            if (switched)
-            {
-                line.material = line.materials[1];
-            }
-            else if(!switched)
-            {
-                line.material = line.materials[0];
-            }
+            
         }
        
     }
+
     public void Trigger()
     {
+        oppositeBool.TurnOff();
         foreach (InteractiveObject obj in objects)
         {
             obj.Affect(value);
         }
     }
 
+    private void TurnOff()
+    {
+        switched = false;
+        ToggleLine();
+    }
+
+    private void ToggleLine() => line.colorGradient = switched ? activeColor : disabledColor;
+
     private void OnTriggerEnter(Collider other) 
     {
         switched = true;
+        ToggleLine();
     }
 }

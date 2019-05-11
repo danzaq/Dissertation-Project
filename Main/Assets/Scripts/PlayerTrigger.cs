@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerTrigger : MonoBehaviour
 {
+    public Vector3 respawnPosition;
     private void Start()
     {
+        respawnPosition = gameObject.transform.position;
         for (int i = 0; i < 6; i++)
         {
             Debug.Log(1 << i);
@@ -27,6 +29,11 @@ public class PlayerTrigger : MonoBehaviour
         if(other.tag == "Gate")
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if (other.tag == "respawnWall")
+        {
+            gameObject.transform.position = respawnPosition;
         }
     }
 

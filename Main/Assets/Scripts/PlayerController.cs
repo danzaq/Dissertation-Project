@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour {
 	CharacterController controller;
 
 	void Start () {
-		animator = GetComponent<Animator> ();
+		//animator = GetComponent<Animator> ();
 		cameraT = Camera.main.transform;
 		controller = GetComponent<CharacterController> ();
 	}
@@ -40,8 +40,8 @@ public class PlayerController : MonoBehaviour {
 			Jump ();
 		}
 		// animator
-		float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
-		animator.SetFloat ("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
+		//float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
+		//animator.SetFloat ("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
 
         
 	}

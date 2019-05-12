@@ -15,6 +15,14 @@ public class PlayerTrigger : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);          
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Switch")

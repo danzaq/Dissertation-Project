@@ -28,7 +28,12 @@ public class PlayerTrigger : MonoBehaviour
 
         if(other.tag == "Gate")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1 );
+        }
+        
+        if(other.tag == "ExitGame")
+        {
+            Application.Quit();
         }
 
         if (other.tag == "respawnWall")

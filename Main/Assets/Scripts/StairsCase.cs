@@ -4,67 +4,77 @@ using UnityEngine;
 
 public class StairsCase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public GameObject[] stairPieces;
-    public float openSpeed;
-    public float offSet;
-    private Vector3 currentPosition;
-    private Vector3 newPosition;
-    public bool triggered;
-    [Header("The angle added has to always be 12.84")]
-    public float xAng;
-    public float yAng;
-    public float zAng;
+    public Transform startPoint, endPoint;
 
-    //public float minHeight;
-    [Header("Hovering animation properties")]
-    public float maxHeight;
-    public float hoverSpeed;
-    private Vector3 initialPosition;
+    public Vector3 onAxis;
+    public Transform[] walkWay;
 
-    Coroutine MoveIE;
-    
-    void Start()
+    List<MovablePlatform> platforms = new List<MovablePlatform>();
+
+    private void Awake()
     {
-          initialPosition = gameObject.transform.position;
+        if (startPoint == null || endPoint == null) enabled = false;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        gameObject.transform.position = new Vector3(transform.position.x, initialPosition.y + Mathf.PingPong(Time.time * hoverSpeed, maxHeight) - maxHeight/2f, transform.position.z);;
-    }
+        float singlePercent = 1f / walkWay.Length;
+        float offset = singlePercent * 0.5f;
 
-    private void OnTriggerEnter(Collider other) 
-    {
-        if (other.tag == "player" && !triggered)
+        for (int i = 0; i < walkWay.Length; i++)
         {
-            StartCoroutine(moveObject());
-            triggered = true;
-        }        
-    }
-
-    IEnumerator moveObject()
-    {
-        for (int i = 0; i < stairPieces.Length; i++)
-        {
-            MoveIE = StartCoroutine(Moving(i));
-            newPosition = new Vector3(stairPieces[i].transform.position.x,(stairPieces[i].transform.position.y + (i + offSet)),stairPieces[i].transform.position.z);
-            Debug.Log(newPosition);
-            yield return MoveIE;
+           MovablePlatform platform = walkWay[i].gameObject.AddComponent<MovablePlatform>();
+           platforms.Add(platform);
         }
     }
 
-    IEnumerator Moving(int initialPosition)
+    private void Update()
     {
-        while (stairPieces[initialPosition].transform.position != newPosition)
-        {
-            Debug.Log("hello");
-            Debug.Log(stairPieces[initialPosition].transform.position);
-            stairPieces[initialPosition].transform.position = Vector3.MoveTowards(stairPieces[initialPosition].transform.position, newPosition , openSpeed * Time.deltaTime);
-            stairPieces[initialPosition].transform.eulerAngles = new Vector3(xAng,yAng,zAng);
-            yield return null;
-        }        
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+              
+        // }
     }
-    
+
+    private void OnTriggerEnter(Collider other) 
+    {    
+        if (other.tag == "player")
+        {
+            DoTransition();  
+        }
+    }
+    public void DoTransition()
+    {
+        StartCoroutine(MovePlatforms());
+    }
+
+    private IEnumerator MovePlatforms()
+    {
+        float singlePercent = 1f / walkWay.Length;
+        float offset = singlePercent * 0.5f;
+        int i = 0;
+
+        foreach (MovablePlatform platform in platforms)
+        {
+            Vector3 newPosition = (offset + (singlePercent * i)) * (endPoint.position - startPoint.position) + startPoint.position;
+            Vector3 newRotation = Vector3.Angle(startPoint.position, endPoint.position) * Vector3.Reflect(onAxis, onAxis);
+
+            platform.SetTargets(newPosition, Quaternion.Euler(newRotation));
+            yield return new WaitForSeconds(0.25f);
+            i++;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (startPoint == null || endPoint == null) return;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(startPoint.position, 1f);
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(endPoint.position, 1f);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(startPoint.position, endPoint.position);
+    }
 }

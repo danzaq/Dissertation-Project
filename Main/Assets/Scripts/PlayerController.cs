@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour {
 	Transform cameraT;
 	CharacterController controller;
 
+	[SerializeField] ParticleSystem trailParticles;
+
 	void Start () {
 		//animator = GetComponent<Animator> ();
 		cameraT = Camera.main.transform;

@@ -25,11 +25,6 @@ public class BoolBox : MonoBehaviour
     
     void Update() 
     {
-        if(lineNeeded)
-        {
-            Debug.Log(switched);
-            
-        }
        
     }
 

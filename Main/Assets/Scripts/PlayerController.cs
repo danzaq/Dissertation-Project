@@ -41,6 +41,16 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			Jump ();
 		}
+
+        if (inputDir != Vector2.zero)
+        {
+            if (!trailParticles.isPlaying) trailParticles.Play();
+        }
+        else
+        {
+            if (!trailParticles.isStopped) trailParticles.Stop();
+        }
+
 		// animator
 		//float animationSpeedPercent = ((running) ? currentSpeed / runSpeed : currentSpeed / walkSpeed * .5f);
 		//animator.SetFloat ("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);

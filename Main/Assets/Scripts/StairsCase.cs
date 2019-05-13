@@ -6,7 +6,10 @@ public class StairsCase : MonoBehaviour
 {
     public Transform startPoint, endPoint;
 
-    public Vector3 onAxis;
+    public Vector3 endPointOnAxis = Vector3.right;
+
+    public Vector3 panelRotationAxis = Vector3.forward;
+
     public Transform[] walkWay;
 
     List<MovablePlatform> platforms = new List<MovablePlatform>();
@@ -17,9 +20,6 @@ public class StairsCase : MonoBehaviour
     }
     private void Start()
     {
-        float singlePercent = 1f / walkWay.Length;
-        float offset = singlePercent * 0.5f;
-
         for (int i = 0; i < walkWay.Length; i++)
         {
            MovablePlatform platform = walkWay[i].gameObject.AddComponent<MovablePlatform>();
@@ -27,24 +27,12 @@ public class StairsCase : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-              
-        // }
-    }
-
     private void OnTriggerEnter(Collider other) 
     {    
         if (other.tag == "player")
         {
-            DoTransition();  
+           StartCoroutine(MovePlatforms());
         }
-    }
-    public void DoTransition()
-    {
-        StartCoroutine(MovePlatforms());
     }
 
     private IEnumerator MovePlatforms()
@@ -56,7 +44,9 @@ public class StairsCase : MonoBehaviour
         foreach (MovablePlatform platform in platforms)
         {
             Vector3 newPosition = (offset + (singlePercent * i)) * (endPoint.position - startPoint.position) + startPoint.position;
-            Vector3 newRotation = Vector3.Angle(startPoint.position, endPoint.position) * Vector3.Reflect(onAxis, onAxis);
+
+            Vector3 dir = endPoint.position - startPoint.position;
+            Vector3 newRotation = Vector3.Angle(dir, startPoint.TransformDirection(endPointOnAxis)) * panelRotationAxis;
 
             platform.SetTargets(newPosition, Quaternion.Euler(newRotation));
             yield return new WaitForSeconds(0.25f);
